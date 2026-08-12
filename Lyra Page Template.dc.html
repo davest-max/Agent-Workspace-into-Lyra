@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/cxone-official-lyra-design-system-019dda40-58d9-795b-92eb-5ee83bf676e4/components/fig-tokens.css">
+  <link rel="stylesheet" href="_ds/cxone-official-lyra-design-system-019dda40-58d9-795b-92eb-5ee83bf676e4/components/fig-typography.css">
+  <link rel="stylesheet" href="_ds/cxone-official-lyra-design-system-019dda40-58d9-795b-92eb-5ee83bf676e4/components/fig-assets.css">
+  <link rel="stylesheet" href="_ds/cxone-official-lyra-design-system-019dda40-58d9-795b-92eb-5ee83bf676e4/styles.css">
+  <script src="_ds/cxone-official-lyra-design-system-019dda40-58d9-795b-92eb-5ee83bf676e4/_ds_bundle.js"></script>
+  <style>
+    body { margin: 0; font-family: 'Inter', sans-serif; }
+    * { box-sizing: border-box; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.18); border-radius: 4px; }
+    a.lyra-tpl-link { color: var(--lyra-color-fg-link, #185ba4); text-decoration: none; }
+    a.lyra-tpl-link:hover { text-decoration: underline; }
+    textarea.lyra-tpl-composer::placeholder, input.lyra-tpl-search::placeholder { color: var(--lyra-color-fg-secondary, rgba(0,0,0,0.56)); }
+    .lyra-tpl-hide-scrollbar::-webkit-scrollbar { display: none; }
+  </style>
+</helmet>
+
+<div data-theme="{{ theme }}" style="{{ rootStyle }}">
+
+  <sc-if value="{{ showGuide }}" hint-placeholder-val="{{ true }}">
+    <div style="{{ guideBannerStyle }}">
+      <span style="font-size:15px; line-height:1;">ℹ️</span>
+      <div class="lyra-body-sm" style="color:var(--lyra-color-fg-secondary);">
+        <strong class="lyra-body-sm-emphasis" style="color:var(--lyra-color-fg-default);">Agent Workspace shell — shared template.</strong>
+        Duplicate this file per new page. Fixed chrome: top bar, minimized nav rail, assignment list, panel frame, App Space. Swap only what's inside "page frame" (tabs + content card). See the deviation note in the App Space footer.
+      </div>
+      <div style="{{ pageSwitcherStyle }}">
+        <button onclick="{{ switchToChat }}" style="{{ chatSwitcherBtnStyle }}">Chat example</button>
+        <button onclick="{{ switchToReporting }}" style="{{ reportSwitcherBtnStyle }}">Reporting example</button>
+      </div>
+      <button onclick="{{ dismissGuide }}" style="{{ guideDismissStyle }}">Dismiss</button>
+    </div>
+  </sc-if>
+
+  <!-- TOP BAR -->
+  <header style="{{ topBarStyle }}">
+    <div style="display:flex; align-items:center; gap:10px; min-width:0;">
+      <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+        <button aria-label="Open navigation" onclick="{{ toggleDrawer }}" style="{{ iconButtonStyle }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>
+        </button>
+      </sc-if>
+      <button style="{{ appNameStyle }}">
+        <img src="assets/nice-smile-blue-mono.svg" alt="NiCE" style="width: 37px; height: 37px">
+        <span style="font-size: 16px; font-weight: 500; color: var(--lyra-color-fg-default)">Agent Workspace</span>
+      </button>
+    </div>
+    <div style="display:flex; align-items:center; gap:0;">
+      <button aria-label="Toggle theme" onclick="{{ toggleTheme }}" style="{{ iconButtonStyle }}" title="Tweak: theme">
+        <sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        </sc-if>
+        <sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"></path></svg>
+        </sc-if>
+      </button>
+      <sc-if value="{{ canToggleAppSpace }}" hint-placeholder-val="{{ false }}">
+        <button aria-label="Toggle App Space" onclick="{{ toggleAppSpace }}" style="{{ iconButtonStyle }}" title="App Space">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M14 4v16"></path></svg>
+        </button>
+      </sc-if>
+      <button aria-label="Help" style="{{ iconButtonStyle }}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"></circle><path d="M9.5 9a2.5 2.5 0 114 2c-.9.7-1.5 1.2-1.5 2.5M12 17h.01"></path></svg>
+      </button>
+      <button aria-label="Notifications" style="{{ notifButtonStyle }}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 8a6 6 0 1112 0c0 4 1.5 5.5 1.5 5.5H4.5S6 12 6 8z"></path><path d="M10 19a2 2 0 004 0"></path></svg>
+        <span style="{{ notifDotStyle }}"></span>
+      </button>
+      <button style="{{ profilePillStyle }}">
+        <span style="{{ avatarCircleStyle }}">JS</span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 9l6 6 6-6"></path></svg>
+      </button>
+    </div>
+  </header>
+
+  <div style="{{ bodyRowStyle }}">
+    <sc-if value="{{ showScrim }}" hint-placeholder-val="{{ false }}">
+      <div onclick="{{ toggleDrawer }}" style="{{ scrimStyle }}"></div>
+    </sc-if>
+
+    <!-- NAV DRAWER (icon rail + assignment list, becomes an overlay drawer on mobile) -->
+    <div style="{{ navDrawerStyle }}">
+
+      <!-- Minimized icon rail (matches Figma "Shell Sidebar, Minimized=yes": 60px floating card, 36px icons flush stacked) -->
+      <div style="{{ railOuterStyle }}">
+        <nav style="{{ railStyle }}">
+          <sc-for list="{{ railItems }}" as="item" hint-placeholder-count="5">
+            <button title="{{ item.label }}" style="{{ item.style }}" style-hover="background:var(--rail-hover-bg);" style-active="background:var(--rail-press-bg);" style-focus="outline:none; box-shadow:0 0 0 2px var(--lyra-color-bg-surface-container), 0 0 0 4px var(--lyra-color-border-active, #166cca);">
+              <sc-if value="{{ item.active }}" hint-placeholder-val="{{ false }}">
+                <span style="{{ item.barStyle }}"></span>
+              </sc-if>
+              <span style="display:flex;" dangerouslySetInnerHTML="{{ item.iconHtml }}"></span>
+            </button>
+          </sc-for>
+        </nav>
+        
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT CARD -->
+    <div style="{{ mainAreaStyle }}">
+      <div style="{{ contentShellStyle }}">
+
+        <sc-if value="{{ showPageSidebar }}" hint-placeholder-val="{{ true }}">
+          <div style="{{ pageSidebarStyle }}">
+            <div style="{{ pageSidebarHeaderStyle }}">
+              <button style="{{ sidebarHeaderIconBtnStyle }}" aria-label="Add contact"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" x2="19" y1="8" y2="14"></line><line x1="22" x2="16" y1="11" y2="11"></line></svg></button>
+              <div style="flex:1;"></div>
+              <button style="{{ sidebarHeaderIconBtnStyle }}" aria-label="Filter"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width: 19px; height: 21px"><path d="M4 5h16M7 12h10M11 19h2"></path></svg></button>
+              <button style="{{ sidebarHeaderIconBtnStyle }}" aria-label="Collapse sidebar"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width: 19px; height: 21px"><path d="M15 6l-6 6 6 6"></path></svg></button>
+            </div>
+            <div style="{{ tileScrollStyle }}">
+              <sc-for list="{{ assignments }}" as="a" hint-placeholder-count="2">
+                <div style="{{ a.outerCardStyle }}">
+                  <sc-if value="{{ a.selected }}" hint-placeholder-val="{{ true }}">
+                    <div style="{{ a.headerStyle }}">
+                      <div style="min-width:0; flex:1;">
+                        <div style="font-size: 16px; font-weight: 600">{{ a.name }}</div>
+                        <div style="{{ tileSubtitleStyle }}">{{ a.channel }}</div>
+                      </div>
+                      <span style="{{ tileDividerStyle }}"></span>
+                      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0;">
+                        <span style="{{ a.iconWrapStyle }}" dangerouslySetInnerHTML="{{ a.iconHtml }}"></span>
+                        <span style="font-size: 14px">{{ a.timer }}</span>
+                      </div>
+                    </div>
+                    <div style="{{ tileSubcardWrapStyle }}">
+                      <div style="{{ tileSubcardStyle }}">
+                        <div style="{{ tileRowStyle }}">
+                          <span style="{{ tilenamestyle }} font-size: 18px; font-size: 14px">{{ a.phone }}</span>
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--lyra-color-fg-secondary)" stroke-width="1.8"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+                        </div>
+                        <div style="width: 174px; height: 8px">{{ a.queue }}</div>
+                        <div style="{{ tileIconGridStyle }}">
+                          <button style="{{ tileIconBtnStyle }}" aria-label="Hold" title="Pause"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="4" width="4" height="16" rx="1"></rect><rect x="6" y="4" width="4" height="16" rx="1"></rect></svg></button>
+                          <button style="{{ tileIconBtnStyle }}" aria-label="Mute" title="Mic off"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" x2="22" y1="2" y2="22"></line><path d="M18.89 13.23A7.12 7.12 0 0 0 19 12v-2"></path><path d="M5 10v2a7 7 0 0 0 12 5"></path><path d="M15 9.34V5a3 3 0 0 0-5.68-1.33"></path><path d="M9 9v3a3 3 0 0 0 5.12 2.12"></path><line x1="12" x2="12" y1="19" y2="22"></line></svg></button>
+                          <button style="{{ tileIconBtnStyle }}" aria-label="Silence"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 1112 0c0 4 1.5 5.5 1.5 5.5H4.5S6 12 6 8z"></path><path d="M10 19a2 2 0 004 0M2 2l20 20"></path></svg></button>
+                          <button style="{{ tileIconBtnStyle }}" aria-label="Record" title="Disc"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg></button>
+                          <button style="{{ tileIconBtnStyle }}" aria-label="Transfer" title="Arrow left-right"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l4 4"></path><path d="M4 7h16"></path><path d="m16 21 4-4-4-4"></path><path d="M20 17H4"></path></svg></button>
+                          <button style="{{ tileIconBtnStyle }}" aria-label="Keypad" title="Grip"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"></circle><circle cx="19" cy="5" r="1"></circle><circle cx="5" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle><circle cx="19" cy="19" r="1"></circle><circle cx="5" cy="19" r="1"></circle></svg></button>
+                        </div>
+                        <div style="{{ tileFooterStyle }}">
+                          <button style="{{ declineBtnStyle }}" aria-label="Decline" title="Phone off"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 17.72V20a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-3.33-2.67m-2.67-3.34a19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4 2h2.28a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.31 9.69"></path><line x1="22" x2="2" y1="2" y2="22"></line></svg></button>
+                          <span style="{{ tileFooterDividerStyle }}"></span>
+                          <button style="{{ acceptTileBtnStyle }}" aria-label="Accept" title="Circle check big"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg></button>
+                        </div>
+                      </div>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ a.unselected }}" hint-placeholder-val="{{ false }}">
+                    <div style="min-width:0; flex:1;">
+                      <div style="font-size: 16px; font-weight: 600">{{ a.name }}</div>
+                      <div style="{{ tileSubtitleStyle }}">{{ a.channel }}</div>
+                    </div>
+                    <span style="{{ tileDividerStyle }}"></span>
+                    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0;">
+                      <span style="{{ a.iconWrapStyle }}" dangerouslySetInnerHTML="{{ a.iconHtml }}"></span>
+                      <span style="font-size: 14px">{{ a.timer }}</span>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <div style="{{ pageFrameStyle }}">
+          <sc-if value="{{ isReporting }}" hint-placeholder-val="{{ false }}">
+            <div style="{{ pageHeaderRowStyle }}">
+              <span style="{{ pageHeaderIconWrap }}" dangerouslySetInnerHTML="{{ reportingIconHtml }}"></span>
+              <h1 style="{{ pageHeaderTitleStyle }} margin:0;">Reporting</h1>
+            </div>
+          </sc-if>
+          <div class="lyra-tpl-hide-scrollbar" style="{{ tabRowStyle }}">
+            <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="4">
+              <button onclick="{{ tab.onClick }}" style="{{ tab.style }}" class="lyra-label">
+                <sc-if value="{{ tab.hasIcon }}" hint-placeholder-val="{{ true }}">
+                  <span style="{{ tab.iconWrapStyle }}" dangerouslySetInnerHTML="{{ tab.iconHtml }}"></span>
+                </sc-if>
+                {{ tab.label }}
+              </button>
+            </sc-for>
+            
+          </div>
+
+          <sc-if value="{{ isChatPage }}" hint-placeholder-val="{{ true }}">
+          <div style="{{ interactionCardStyle }}">
+            <div style="{{ subheaderStyle }}">
+              <div style="display:flex; align-items:center; gap:8px; min-width:0;">
+                <span class="lyra-body-sm" style="color:var(--lyra-color-fg-secondary); white-space:nowrap;">3 private messages&nbsp;&nbsp;|&nbsp;&nbsp;# 22073579&nbsp;&nbsp;|</span>
+                <span style="{{ statusPillStyle }}">
+                  <span style="{{ statusDotStyle }}"></span>Open
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"></path></svg>
+                </span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px; flex-shrink:0;">
+                <a href="#" class="lyra-body-sm lyra-tpl-link" style="display:flex; align-items:center; gap:2px;">View Details
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 9l6 6 6-6"></path></svg>
+                </a>
+                <button style="{{ smallIconBtnStyle }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="5" cy="12" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="19" cy="12" r="1.6"></circle></svg></button>
+              </div>
+            </div>
+
+            <div style="{{ chatAreaStyle }}">
+              <sc-for list="{{ messages }}" as="msg" hint-placeholder-count="4">
+                <div style="{{ msg.wrapStyle }}">
+                  <span class="lyra-body-md-emphasis" style="color:var(--lyra-color-fg-default);">{{ msg.sender }}</span>
+                  <div style="{{ msg.bubbleStyle }}">
+                    <span class="lyra-body-md" style="color:var(--lyra-color-fg-default);">{{ msg.text }}</span>
+                  </div>
+                  <div style="display:flex; align-items:center; gap:4px;">
+                    <sc-if value="{{ msg.read }}" hint-placeholder-val="{{ false }}">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--lyra-color-fg-secondary)" stroke-width="2"><path d="M18 6L7 17l-5-5M22 6L11 17l-1-1"></path></svg>
+                    </sc-if>
+                    <span class="lyra-body-sm" style="color:var(--lyra-color-fg-secondary);">{{ msg.time }}</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="{{ composerStyle }}">
+              <div style="{{ composerToolbarStyle }}">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h8a4 4 0 010 8H6zM6 12h9a4 4 0 010 8H6z"></path></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 4h-9M14 20H5M14.7 4.7L9.2 19.3"></path></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"></path></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21.4 11.5l-8.5 8.5a4.9 4.9 0 01-7-7l9-9a3.3 3.3 0 014.6 4.6l-9 9a1.6 1.6 0 01-2.3-2.3l8.2-8.2"></path></svg>
+                <span style="{{ toolbarDividerStyle }}"></span>
+                <span class="lyra-body-sm" style="color:var(--lyra-color-fg-secondary);">Button</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 9l6 6 6-6"></path></svg>
+              </div>
+              <textarea class="lyra-tpl-composer" placeholder="This is your response to the customer." rows="2" style="{{ composerInputStyle }}"></textarea>
+              <div style="{{ composerFooterStyle }}">
+                <button style="{{ ghostBtnStyle }}">Button <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="margin-left:4px;"><path d="M6 9l6 6 6-6"></path></svg></button>
+                <button style="{{ primaryBtnStyle }}">Reply</button>
+              </div>
+            </div>
+          </div>
+          </sc-if>
+
+          <sc-if value="{{ isReporting }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex; flex-direction:column; flex:1; min-height:0;">
+            <div style="{{ reportHeaderRowStyle }}">
+              <h1 class="lyra-heading-lg" style="margin:0; color:var(--lyra-color-fg-default);">Productivity (0%)</h1>
+              <div style="{{ dateRangeGroupStyle }}">
+                <sc-for list="{{ dateRangeBtns }}" as="d" hint-placeholder-count="4">
+                  <button onclick="{{ d.onClick }}" style="{{ d.style }}">{{ d.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+            <div style="{{ reportTableWrapStyle }}">
+              <div style="{{ reportHeadRowStyle }}">
+                <span style="{{ reportLabelColStyle }}">Agent states</span>
+                <span style="{{ reportTimeColStyle }}">Time</span>
+              </div>
+              <sc-for list="{{ reportRows }}" as="row" hint-placeholder-count="3">
+                <div style="{{ reportRowStyle }}">
+                  <div style="{{ reportMainRowInner }}">
+                    <div style="{{ reportLabelColStyle }} display:flex; align-items:center; gap:10px;">
+                      <span style="{{ row.iconWrapStyle }}" dangerouslySetInnerHTML="{{ row.iconHtml }}"></span>
+                      <span class="lyra-body-md-emphasis" style="color:var(--lyra-color-fg-default);">{{ row.label }}</span>
+                    </div>
+                    <div style="{{ reportTimeColStyle }}">
+                      <div style="display:flex; align-items:center; gap:12px;">
+                        <div style="{{ row.barStyle }}"></div>
+                        <span class="lyra-body-md-emphasis" style="color:var(--lyra-color-fg-default); flex-shrink:0;">{{ row.time }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <sc-for list="{{ row.subs }}" as="sub" hint-placeholder-count="1">
+                    <div style="{{ reportSubRowStyle }}">
+                      <span class="lyra-body-sm" style="{{ reportLabelColStyle }} color:var(--lyra-color-fg-secondary); padding-left:28px;">{{ sub.label }}</span>
+                      <div style="{{ reportTimeColStyle }}">
+                        <div style="display:flex; align-items:center; gap:12px;">
+                          <div style="{{ sub.barStyle }}"></div>
+                          <span class="lyra-body-sm" style="color:var(--lyra-color-fg-secondary); flex-shrink:0;">{{ sub.time }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+
+    <!-- APP SPACE -->
+    <sc-if value="{{ showAppSpace }}" hint-placeholder-val="{{ true }}">
+      <aside style="{{ appSpaceStyle }}">
+        <div style="{{ appSpaceHeaderStyle }}">
+          <span class="lyra-body-sm-emphasis" style="color:var(--lyra-color-fg-default);">App Space</span>
+          <div style="{{ appSpaceIconRowStyle }}">
+            <sc-for list="{{ appSpaceIcons }}" as="icon" hint-placeholder-count="9">
+              <button title="{{ icon.label }}" style="{{ icon.style }}" style-hover="background:var(--icon-hover-bg);" style-active="background:var(--icon-press-bg);" style-focus="outline:none; box-shadow:0 0 0 2px var(--lyra-color-bg-surface-container), 0 0 0 4px var(--lyra-color-border-active, #166cca);" dangerouslySetInnerHTML="{{ icon.iconHtml }}"></button>
+            </sc-for>
+            <sc-if value="{{ canToggleAppSpace }}" hint-placeholder-val="{{ false }}">
+              <button onclick="{{ toggleAppSpace }}" style="{{ appSpaceCloseBtnStyle }}" style-hover="background:var(--lyra-color-state-bg-hover-opacity);" style-active="background:var(--lyra-color-state-bg-pressed-opacity);" style-focus="outline:none; box-shadow:0 0 0 2px var(--lyra-color-bg-surface-container), 0 0 0 4px var(--lyra-color-border-active, #166cca);" aria-label="Close App Space"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 6L6 18M6 6l12 12"></path></svg></button>
+            </sc-if>
+          </div>
+        </div>
+        <div style="{{ appSpaceCanvasStyle }}">
+          <div class="lyra-body-sm" style="color:var(--lyra-color-fg-secondary); text-align:center; max-width:200px;">Product-specific panel — populate per app (Customer Card, Contact History, scripts, etc.)</div>
+        </div>
+        <div style="{{ deviationNoteStyle }}">
+          <strong>Deviation note:</strong> structure and content follow the AW-60964 Figma frame; chat-bubble and accept/outcome colors were remapped onto Lyra status tokens (success/critical/conversation-*) since the source frame mixes legacy SOL hex values not defined in the Lyra token set. The left rail and App Space icon slots are unresolved generic placeholders in the Figma source — both now use the same explicit Lucide set (History, Search, BookUser, CalendarDays, MessageSquareText, ChartBarBig, Inbox, Settings, Ellipsis). States follow the Lyra "Nav-Page" base component from the Figma kit: default (no wash), hover (light gray wash + thin left accent bar), pressed (darker gray wash, same bar); the rail additionally shows a persistent selected state (Inbox, by default) with a light-blue wash, blue left bar, and blue icon, since it's navigation rather than a momentary-action toolbar. The Web Chat/Email tab icons are real vectors extracted from a separate custom "Agent-icons" Figma library (not Lyra's icon set) via Figma's own component data — their brand-specific channel colors (green/pink) are kept as source-exact hex, outside the Lyra token palette by design. Confirm with design before shipping if exact hex parity or specific icon choices are required.
+        </div>
+      </aside>
+    </sc-if>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;light&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;tsType&quot;:&quot;'light'|'dark'&quot;,&quot;section&quot;:&quot;Theme&quot;},&quot;showAIRail&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Layout&quot;}}">
+class Component extends DCLogic {
+  state = {
+    width: typeof window !== 'undefined' ? window.innerWidth : 1440,
+    theme: this.props?.theme ?? 'light',
+    activeTab: 0,
+    activePage: 'chat',
+    dateRange: 'Today',
+    showGuide: true,
+    drawerOpen: false,
+    appSpaceOpen: typeof window !== 'undefined' ? window.innerWidth >= 1180 : true,
+  };
+
+  componentDidMount() {
+    this._onResize = () => this.setState({ width: window.innerWidth });
+    window.addEventListener('resize', this._onResize);
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this._onResize); }
+
+  toggleTheme = () => this.setState(s => ({ theme: s.theme === 'dark' ? 'light' : 'dark' }));
+  toggleDrawer = () => this.setState(s => ({ drawerOpen: !s.drawerOpen }));
+  toggleAppSpace = () => this.setState(s => ({ appSpaceOpen: !s.appSpaceOpen }));
+  dismissGuide = () => this.setState({ showGuide: false });
+  setTab = (i) => this.setState({ activeTab: i });
+  setPage = (p) => this.setState({ activePage: p, activeTab: 0 });
+  setDateRange = (r) => this.setState({ dateRange: r });
+
+  renderVals() {
+    const width = this.state.width;
+    const isMobile = width < 768;
+    const isTablet = width >= 768 && width < 1180;
+    const isDesktop = width >= 1180;
+    const theme = this.state.theme;
+    const isDark = theme === 'dark';
+    const isLight = !isDark;
+
+    const border = 'var(--lyra-color-border-default)';
+    const borderSubtle = 'var(--lyra-color-border-subtle)';
+    const fgDefault = 'var(--lyra-color-fg-default)';
+    const fgSecondary = 'var(--lyra-color-fg-secondary)';
+    const brand = 'var(--lyra-color-bg-primary)';
+    const activeSubtle = 'var(--lyra-color-bg-active-subtle)';
+    const activeModerate = 'var(--lyra-color-bg-active-moderate)';
+    const activeFg = 'var(--lyra-color-fg-active-strong)';
+    const shell = 'var(--lyra-color-bg-surface-shell)';
+    const container = 'var(--lyra-color-bg-surface-container)';
+    const success = 'var(--lyra-color-status-success-strong)';
+    const successSubtle = 'var(--lyra-color-status-success-subtle)';
+    const critical = 'var(--lyra-color-status-critical-strong, #bc2626)';
+    const warning = 'var(--lyra-color-status-warning-strong, #b45309)';
+
+    const showAppSpace = (this.props?.showAIRail ?? true) && !isMobile && (isDesktop || this.state.appSpaceOpen);
+    const canToggleAppSpace = !isMobile && isTablet;
+    const showPageSidebar = isDesktop;
+    const drawerFixed = isMobile;
+    const drawerOpen = isMobile ? this.state.drawerOpen : true;
+
+    const rootStyle = `height:100vh; display:flex; flex-direction:column; background:${shell}; color:${fgDefault}; overflow:hidden; position:relative;`;
+    const guideBannerStyle = `display:flex; align-items:flex-start; gap:10px; padding:8px 16px; background:var(--lyra-color-bg-field-ai, #f2effb); border-bottom:1px solid ${borderSubtle};`;
+    const guideDismissStyle = `background:none; border:none; color:${fgSecondary}; font-size:12px; cursor:pointer; text-decoration:underline; flex-shrink:0; padding:0; margin-left:auto;`;
+
+    const topBarStyle = `height:56px; flex-shrink:0; display:flex; align-items:center; justify-content:space-between; padding:0 8px; background:${shell}; z-index:40;`;
+    const appNameStyle = `display:flex; align-items:center; gap:8px; height:40px; background:none; border:none; cursor:pointer; color:${fgDefault}; padding:0 10px; border-radius:6px;`;
+    const brandMarkStyle = `width:24px; height:24px; flex-shrink:0; display:block;`;
+    const iconButtonStyle = `width:40px; height:40px; display:flex; align-items:center; justify-content:center; background:none; border:none; border-radius:6px; cursor:pointer; color:${fgSecondary}; flex-shrink:0;`;
+    const notifButtonStyle = iconButtonStyle + ' position:relative;';
+    const notifDotStyle = `position:absolute; top:9px; right:9px; width:7px; height:7px; border-radius:50%; background:${critical}; box-shadow:0 0 0 2px ${shell};`;
+    const profilePillStyle = `display:flex; align-items:center; gap:4px; height:40px; background:none; border:none; cursor:pointer; padding:0 8px 0 4px; border-radius:6px; color:${fgSecondary};`;
+    const avatarCircleStyle = `width:26px; height:26px; border-radius:50%; background:var(--lyra-base-color-slate-700, #3d4451); color:#fff; font-size:10px; font-weight:600; display:flex; align-items:center; justify-content:center; flex-shrink:0;`;
+
+    const bodyRowStyle = `flex:1; display:flex; min-height:0; position:relative;`;
+    const scrimStyle = `position:fixed; inset:0; top:52px; background:rgba(0,0,0,0.4); z-index:44;`;
+
+    const navDrawerStyle = `display:flex; flex-shrink:0; min-height:0; ${drawerFixed ? `position:fixed; top:52px; bottom:0; left:0; z-index:45; transform:translateX(${drawerOpen ? '0' : '-100%'}); transition:transform 180ms cubic-bezier(0.4,0,0.2,1); box-shadow:${drawerOpen ? '2px 0 12px rgba(0,0,0,0.2)' : 'none'};` : ''}`;
+
+    const railOuterStyle = `position:relative; margin:10px 0 10px 10px; flex-shrink:0; height:calc(100% - 20px); display:flex;`;
+    const railStyle = `width:60px; display:flex; flex-direction:column; align-items:stretch; padding:16px 10px; gap:16px; overflow-y:auto; min-height:0;`;
+    const railToggleStyle = `position:absolute; top:50%; right:-9px; transform:translateY(-50%); width:18px; height:18px; border-radius:50%; background:${container}; border:1px solid ${border}; display:flex; align-items:center; justify-content:center; cursor:pointer; color:${fgSecondary}; padding:0;`;
+    // Lucide icon set, per explicit request — same 9 icons used in BOTH the left rail and App Space rows.
+    const railIcons = {
+      history: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>',
+      search: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>',
+      bookUser: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 13a3 3 0 1 0-6 0"/><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><circle cx="12" cy="8" r="2"/></svg>',
+      calendarDays: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>',
+      messageSquareText: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8H7"/><path d="M17 12H7"/><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+      chartBarBig: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><rect x="7" y="13" width="9" height="4" rx="1"/><rect x="7" y="5" width="12" height="4" rx="1"/></svg>',
+      inbox: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></svg>',
+      settings: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.6V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.6-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.6V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.6 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.6 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.6 1z"/></svg>',
+      ellipsis: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>',
+    };
+    const isReporting = this.state.activePage === 'reporting';
+    const isChatPage = !isReporting;
+    const iconOrder = ['history', 'search', 'bookUser', 'calendarDays', 'messageSquareText', 'chartBarBig', 'inbox', 'settings', 'ellipsis'];
+    const selectedRailKey = isReporting ? 'chartBarBig' : 'inbox';
+    const railDefs = iconOrder.map(key => ({ key, active: key === selectedRailKey }));
+    // Matches the Lyra "Nav-Page" base states from the Figma kit: default (no wash), hover (light gray wash +
+    // thin left accent bar), pressed (darker gray wash, same bar), selected (light-blue wash + blue bar + blue icon).
+    // style-hover/active/focus compile to static CSS classes at template-parse time, so their VALUES must be
+    // literal strings in the markup — per-item variation instead flows through CSS custom properties set inline.
+    const railItems = railDefs.map((d, i) => ({
+      label: d.key,
+      active: d.active,
+      iconHtml: { __html: railIcons[d.key] },
+      style: `position:relative; width:100%; height:40px; border:none; border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; background:${d.active ? 'var(--lyra-color-bg-active-subtle)' : 'transparent'}; color:${d.active ? activeFg : fgDefault}; overflow:visible; flex-shrink:0; transition:background 120ms ease; --rail-hover-bg:${d.active ? 'var(--lyra-color-state-bg-hover-active-subtle)' : 'var(--lyra-color-state-bg-hover-opacity)'}; --rail-press-bg:${d.active ? 'var(--lyra-color-state-bg-pressed-active-subtle)' : 'var(--lyra-color-state-bg-pressed-opacity)'};`,
+      barStyle: `position:absolute; left:-14px; top:50%; transform:translateY(-50%); width:3px; height:24px; border-radius:2px; background:${brand};`,
+    }));
+
+    const purpleAccent = 'var(--lyra-color-accent-purple-strong, #6149C1)';
+    const channelGreenTile = 'var(--lyra-color-status-success-strong, #21742c)';
+    const inboundVoiceSvg = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M 12.305 10.548 C 12.305 10.548 11.601 11.65 11.538 11.744 C 11.476 11.837 11.337 12.114 10.681 11.927 C 9.168 11.358 7.83 10.424 6.795 9.213 C 5.571 8.156 4.638 6.82 4.081 5.326 C 3.893 4.67 4.17 4.534 4.263 4.468 C 4.357 4.403 5.458 3.698 5.458 3.698 C 6.2 3.264 5.361 1.405 4.009 0.51 C 3.012 -0.152 2.573 -0.086 2.154 0.239 C 1.471 0.786 0.86 1.413 0.335 2.105 C 0.069 2.476 -0.045 2.929 0.016 3.377 C 0.235 4.792 0.741 6.152 1.503 7.377 C 2.363 8.834 3.417 10.174 4.637 11.365 C 5.816 12.576 7.157 13.63 8.623 14.5 C 9.836 15.258 11.2 15.764 12.626 15.985 C 13.077 16.044 13.534 15.93 13.899 15.666 C 14.594 15.136 15.22 14.524 15.761 13.845 C 16.089 13.421 16.149 12.989 15.489 11.99 C 14.599 10.645 12.74 9.807 12.305 10.548 Z" transform="translate(8 4)"/><path d="M 3.23 0 C 3.783 0 4.23 0.448 4.23 1 L 4.23 7.2 L 6.12 7.2 C 6.357 7.2 6.501 7.464 6.372 7.663 L 3.492 12.114 C 3.375 12.296 3.11 12.298 2.99 12.117 L 0.05 7.665 C -0.081 7.466 0.062 7.2 0.301 7.2 L 2.23 7.2 L 2.23 1 C 2.23 0.448 2.678 0 3.23 0 Z" transform="translate(0 6)"/></svg>';
+    const inboundChatSvg = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M 10.38 0 L 5.62 0 C 4.135 -0.005 2.709 0.585 1.655 1.641 C 0.602 2.697 0.006 4.132 0 5.631 L 0 5.727 C 0.006 7.226 0.602 8.661 1.655 9.717 C 2.709 10.773 4.135 11.363 5.62 11.358 L 7.911 11.358 L 12.817 14.915 C 12.894 14.967 12.984 14.997 13.077 15 C 13.169 15.003 13.261 14.98 13.341 14.933 C 13.413 14.891 13.473 14.83 13.515 14.757 C 13.557 14.684 13.58 14.601 13.58 14.517 L 12.847 10.769 C 13.788 10.313 14.583 9.599 15.141 8.707 C 15.699 7.816 15.996 6.784 16 5.73 L 16 5.633 C 15.995 4.134 15.4 2.698 14.346 1.642 C 13.292 0.585 11.866 -0.005 10.38 0 Z" transform="translate(9 5)"/><path d="M 3.23 0 C 3.783 0 4.23 0.448 4.23 1 L 4.23 7.2 L 6.12 7.2 C 6.357 7.2 6.501 7.464 6.372 7.663 L 3.492 12.114 C 3.375 12.296 3.11 12.298 2.99 12.117 L 0.05 7.665 C -0.081 7.466 0.062 7.2 0.301 7.2 L 2.23 7.2 L 2.23 1 C 2.23 0.448 2.678 0 3.23 0 Z" transform="translate(1 6)"/></svg>';
+
+    const assignmentDefs = [
+      { name: 'Liam Davis', channel: 'Voice-inbound', timer: '1:12', phone: '253-895-8956', queue: '', selected: true, iconHtml: inboundVoiceSvg, iconColor: purpleAccent },
+      { name: 'Sarah Chen', channel: 'Webchat-inbou…', timer: '1:12', selected: false, iconHtml: inboundChatSvg, iconColor: channelGreenTile },
+    ];
+    const assignments = assignmentDefs.map(a => ({
+      name: a.name, channel: a.channel, timer: a.timer, phone: a.phone, queue: a.queue, selected: a.selected, unselected: !a.selected,
+      iconHtml: { __html: a.iconHtml }, iconWrapStyle: `color:${a.iconColor}; display:flex;`,
+      outerCardStyle: a.selected
+        ? `border-radius:12px; overflow:hidden; border:1.5px solid ${brand}; border-left-width:6px; background:#F1F7FE; margin-bottom:16px;`
+        : `border-radius:12px; border:1px solid ${borderSubtle}; background:${container}; padding:16px 20px; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; gap:14px;`,
+      headerStyle: `display:flex; align-items:center; justify-content:space-between; gap:14px; padding:20px 20px 16px;`,
+    }));
+    const tileDividerStyle = `width:1px; align-self:stretch; background:${borderSubtle}; flex-shrink:0;`;
+    const tileNameStyle = `font-size:20px; font-weight:700; line-height:24px; color:${fgDefault}; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;`;
+    const tileSubtitleStyle = `font-size:14px; color:${fgSecondary}; margin-top:2px;`;
+    const tileTimerStyle = `font-size:20px; font-weight:700; color:${fgDefault};`;
+    const tileSubcardWrapStyle = `padding:0 10px 10px;`;
+    const tileSubcardStyle = `background:${container}; border-radius:10px; box-shadow:0 1px 2px rgba(0,0,0,0.06); overflow:hidden;`;
+
+    const mainAreaStyle = `flex:1; min-width:0; display:flex; padding:${isMobile ? '8px' : '10px'}; gap:8px; overflow:hidden;`;
+    const contentShellStyle = `flex:1; min-width:0; background:${container}; border:1px solid ${borderSubtle}; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.04); display:flex; overflow:hidden;`;
+
+    const pageSidebarStyle = `width:238px; flex-shrink:0; background:var(--lyra-color-bg-surface-container-subtle, #fbfcfe); border-right:1px solid ${borderSubtle}; display:flex; flex-direction:column; overflow:hidden;`;
+    const pageSidebarHeaderStyle = `display:flex; align-items:center; gap:2px; padding:14px 12px; flex-shrink:0;`;
+    const sidebarHeaderIconBtnStyle = `width:34px; height:34px; border:none; background:none; border-radius:6px; color:${fgSecondary}; display:flex; align-items:center; justify-content:center; cursor:pointer;`;
+    const tileScrollStyle = `flex:1; overflow-y:auto; padding:0 14px 14px;`;
+    const tileRowStyle = `display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid ${borderSubtle};`;
+    const tileQueueRowStyle = `text-align:center; padding:14px 20px; font-size:14px; color:${fgSecondary}; border-bottom:1px solid ${borderSubtle};`;
+    const tileIconGridStyle = `display:grid; grid-template-columns:repeat(3,1fr); border-bottom:1px solid ${borderSubtle};`;
+    const tileIconBtnStyle = `height:56px; border:none; background:none; color:${fgSecondary}; display:flex; align-items:center; justify-content:center; cursor:pointer;`;
+    const tileFooterStyle = `display:flex; align-items:center;`;
+    const tileFooterDividerStyle = `width:1px; align-self:stretch; background:${borderSubtle};`;
+    const declineBtnStyle = `flex:1; height:56px; border:none; background:none; color:${critical}; display:flex; align-items:center; justify-content:center; cursor:pointer;`;
+    const acceptTileBtnStyle = `flex:1; height:56px; border:none; background:none; color:var(--lyra-color-fg-link,#185ba4); display:flex; align-items:center; justify-content:center; cursor:pointer;`;
+    const pageFrameStyle = `flex:1; min-width:0; display:flex; flex-direction:column; padding:0 4px;`;
+
+    // Exact vector data pulled from the .fig via fig_materialize (assets/figma-icons/icon-data.js) — these are
+    // custom channel-identity icons from a separate Figma icon library, not part of the Lyra core icon set.
+    // All 4 use the "Inbound" variant of the custom Agent-icons Figma library (arrow + glyph), pulled via fig_materialize.
+    const chatIconSvg = '<svg width="20" height="20" viewBox="0 0 24 24"><path d="M 3.23 0 C 3.783 0 4.23 0.448 4.23 1 L 4.23 7.2 L 6.12 7.2 C 6.357 7.2 6.501 7.464 6.372 7.663 L 3.492 12.114 C 3.375 12.296 3.11 12.298 2.99 12.117 L 0.05 7.665 C -0.081 7.466 0.062 7.2 0.301 7.2 L 2.23 7.2 L 2.23 1 C 2.23 0.448 2.678 0 3.23 0 Z" fill="currentColor" transform="translate(1 6)"/><path d="M 10.38 0 L 5.62 0 C 4.135 -0.005 2.709 0.585 1.655 1.641 C 0.602 2.697 0.006 4.132 0 5.631 L 0 5.727 C 0.006 7.226 0.602 8.661 1.655 9.717 C 2.709 10.773 4.135 11.363 5.62 11.358 L 7.911 11.358 L 12.817 14.915 C 12.894 14.967 12.984 14.997 13.077 15 C 13.169 15.003 13.261 14.98 13.341 14.933 C 13.413 14.891 13.473 14.83 13.515 14.757 C 13.557 14.684 13.58 14.601 13.58 14.517 L 12.847 10.769 C 13.788 10.313 14.583 9.599 15.141 8.707 C 15.699 7.816 15.996 6.784 16 5.73 L 16 5.633 C 15.995 4.134 15.4 2.698 14.346 1.642 C 13.292 0.585 11.866 -0.005 10.38 0 Z" fill="currentColor" transform="translate(9 5)"/></svg>';
+    const emailIconSvg = '<svg width="20" height="20" viewBox="0 0 24 24"><path d="M 3.23 0 C 3.783 0 4.23 0.448 4.23 1 L 4.23 7.2 L 6.12 7.2 C 6.357 7.2 6.501 7.464 6.372 7.663 L 3.492 12.114 C 3.375 12.296 3.11 12.298 2.99 12.117 L 0.05 7.665 C -0.081 7.466 0.062 7.2 0.301 7.2 L 2.23 7.2 L 2.23 1 C 2.23 0.448 2.678 0 3.23 0 Z" fill="currentColor" transform="translate(0 4.582)"/><path d="M 15.2 0.257 C 14.96 0.086 14.72 0 14.4 0 L 1.6 0 C 1.28 0 1.04 0.086 0.8 0.257 L 8 5.057 L 15.2 0.257 Z" fill="currentColor" transform="translate(8 4.582)"/><path d="M 16 1.714 L 8.4 6.771 C 8.32 6.771 8.16 6.857 8 6.857 C 7.84 6.857 7.68 6.771 7.6 6.686 L 0 1.714 L 0 10.286 C 0 11.229 0.72 12 1.6 12 L 14.4 12 C 15.28 12 16 11.229 16 10.286 L 16 1.714 Z" fill="currentColor" transform="translate(8 4.582)"/></svg>';
+    // Voice + SMS — same custom "Agent-icons" Figma library, pulled via fig_materialize (assets/figma-icons/icon-data.js)
+    const voiceIconSvg = '<svg width="20" height="20" viewBox="0 0 24 24"><path d="M 12.305 10.548 C 12.305 10.548 11.601 11.65 11.538 11.744 C 11.476 11.837 11.337 12.114 10.681 11.927 C 9.168 11.358 7.83 10.424 6.795 9.213 C 5.571 8.156 4.638 6.82 4.081 5.326 C 3.893 4.67 4.17 4.534 4.263 4.468 C 4.357 4.403 5.458 3.698 5.458 3.698 C 6.2 3.264 5.361 1.405 4.009 0.51 C 3.012 -0.152 2.573 -0.086 2.154 0.239 C 1.471 0.786 0.86 1.413 0.335 2.105 C 0.069 2.476 -0.045 2.929 0.016 3.377 C 0.235 4.792 0.741 6.152 1.503 7.377 C 2.363 8.834 3.417 10.174 4.637 11.365 C 5.816 12.576 7.157 13.63 8.623 14.5 C 9.836 15.258 11.2 15.764 12.626 15.985 C 13.077 16.044 13.534 15.93 13.899 15.666 C 14.594 15.136 15.22 14.524 15.761 13.845 C 16.089 13.421 16.149 12.989 15.489 11.99 C 14.599 10.645 12.74 9.807 12.305 10.548 Z" fill="currentColor" transform="translate(8 4)"/><path d="M 3.23 0 C 3.783 0 4.23 0.448 4.23 1 L 4.23 7.2 L 6.12 7.2 C 6.357 7.2 6.501 7.464 6.372 7.663 L 3.492 12.114 C 3.375 12.296 3.11 12.298 2.99 12.117 L 0.05 7.665 C -0.081 7.466 0.062 7.2 0.301 7.2 L 2.23 7.2 L 2.23 1 C 2.23 0.448 2.678 0 3.23 0 Z" fill="currentColor" transform="translate(0 6)"/></svg>';
+    const smsIconSvg = '<svg width="20" height="20" viewBox="0 0 24 24"><path d="M 9.801 2.526 L 9.801 1.684 C 9.803 1.465 9.762 1.248 9.681 1.045 C 9.599 0.842 9.478 0.657 9.325 0.5 C 9.171 0.344 8.989 0.219 8.787 0.133 C 8.586 0.048 8.369 0.002 8.15 0 L 1.651 0 C 1.432 0.002 1.215 0.048 1.014 0.133 C 0.812 0.219 0.63 0.344 0.477 0.5 C 0.323 0.657 0.202 0.842 0.121 1.045 C 0.039 1.248 -0.002 1.465 0 1.684 L 0 14.316 C -0.002 14.535 0.039 14.752 0.121 14.955 C 0.202 15.158 0.323 15.343 0.477 15.5 C 0.63 15.656 0.812 15.781 1.014 15.867 C 1.215 15.952 1.432 15.998 1.651 16 L 8.15 16 C 8.369 15.998 8.586 15.952 8.787 15.867 C 8.989 15.781 9.171 15.656 9.325 15.5 C 9.478 15.343 9.599 15.158 9.681 14.955 C 9.762 14.752 9.803 14.535 9.801 14.316 L 9.801 10.948 L 8.15 10.948 L 8.15 12.211 C 8.151 12.265 8.141 12.32 8.12 12.371 C 8.1 12.421 8.07 12.468 8.031 12.507 C 7.993 12.546 7.947 12.577 7.897 12.599 C 7.847 12.62 7.793 12.631 7.738 12.632 L 2.063 12.632 C 2.008 12.631 1.954 12.62 1.904 12.599 C 1.854 12.577 1.808 12.546 1.77 12.507 C 1.731 12.468 1.701 12.421 1.681 12.371 C 1.66 12.32 1.65 12.265 1.651 12.211 L 1.651 2.105 C 1.65 2.05 1.66 1.996 1.681 1.945 C 1.701 1.894 1.731 1.848 1.77 1.809 C 1.808 1.77 1.854 1.738 1.904 1.717 C 1.954 1.695 2.008 1.684 2.063 1.684 L 7.737 1.684 C 7.792 1.684 7.846 1.695 7.896 1.717 C 7.947 1.738 7.992 1.77 8.03 1.809 C 8.069 1.848 8.099 1.894 8.119 1.945 C 8.14 1.996 8.15 2.05 8.149 2.105 L 8.149 2.526 L 9.801 2.526 Z M 4.075 13.474 L 5.722 13.474 C 5.941 13.481 6.148 13.573 6.3 13.73 C 6.452 13.887 6.537 14.097 6.537 14.316 C 6.537 14.535 6.452 14.745 6.3 14.902 C 6.148 15.059 5.941 15.151 5.722 15.158 L 4.075 15.158 C 3.856 15.151 3.649 15.059 3.497 14.902 C 3.345 14.745 3.259 14.535 3.259 14.316 C 3.259 14.097 3.345 13.887 3.497 13.73 C 3.649 13.573 3.856 13.481 4.075 13.474 Z M 11.556 5.895 L 11.556 7.58 C 11.558 7.799 11.517 8.016 11.435 8.219 C 11.353 8.422 11.232 8.607 11.079 8.764 C 10.926 8.92 10.743 9.045 10.542 9.131 C 10.34 9.216 10.124 9.262 9.905 9.264 L 6.604 9.264 L 4.953 10.948 L 4.953 9.263 C 4.734 9.261 4.518 9.216 4.316 9.13 C 4.115 9.044 3.932 8.919 3.779 8.763 C 3.625 8.606 3.505 8.421 3.423 8.218 C 3.341 8.015 3.3 7.798 3.302 7.579 L 3.302 5.895 C 3.3 5.676 3.341 5.459 3.423 5.256 C 3.505 5.052 3.625 4.867 3.779 4.711 C 3.932 4.555 4.115 4.43 4.316 4.344 C 4.518 4.258 4.734 4.213 4.953 4.211 L 9.905 4.211 C 10.124 4.213 10.34 4.258 10.542 4.344 C 10.743 4.43 10.926 4.555 11.079 4.711 C 11.232 4.867 11.353 5.052 11.435 5.256 C 11.517 5.459 11.558 5.676 11.556 5.895 Z" fill="currentColor" transform="translate(9.778 4)"/><path d="M 3.23 0 C 3.783 0 4.23 0.448 4.23 1 L 4.23 7.2 L 6.12 7.2 C 6.357 7.2 6.501 7.464 6.372 7.663 L 3.492 12.114 C 3.375 12.296 3.11 12.298 2.99 12.117 L 0.05 7.665 C -0.081 7.466 0.062 7.2 0.301 7.2 L 2.23 7.2 L 2.23 1 C 2.23 0.448 2.678 0 3.23 0 Z" fill="currentColor" transform="translate(1.84 7.748)"/></svg>';
+    const channelGreen = 'var(--lyra-color-status-success-strong, #21742c)';
+    const channelPink = '#E6258D';
+    const channelPurple = 'var(--lyra-color-accent-purple-strong, #6149C1)';
+    const channelSmsGreen = '#2E9E44';
+    const tabDefs = isReporting
+      ? [{ label: 'Productivity', iconHtml: '', color: null }, { label: 'Performance', iconHtml: '', color: null }]
+      : [
+          { label: 'Voice', iconHtml: voiceIconSvg, color: channelPurple },
+          { label: 'SMS', iconHtml: smsIconSvg, color: channelSmsGreen },
+          { label: 'Web Chat', iconHtml: chatIconSvg, color: channelGreen },
+          { label: 'Email', iconHtml: emailIconSvg, color: channelPink },
+        ];
+    const tabRowStyle = `display:flex; align-items:center; gap:20px; height:48px; padding:0 12px; border-bottom:1px solid ${borderSubtle}; flex-shrink:0; overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none;`;
+    // Lyra "Panel header" pattern: optional breadcrumb, then H1 title (Inter 600, 18/24, -0.01em) — see README.
+    const pageHeaderRowStyle = `display:flex; align-items:center; gap:8px; padding:16px 12px 4px;`;
+    const pageHeaderIconWrap = `width:20px; height:20px; color:${fgDefault}; display:flex;`;
+    const pageHeaderTitleStyle = `font-family:Inter, sans-serif; font-size:18px; line-height:24px; font-weight:600; letter-spacing:-0.01em; color:${fgDefault};`;
+    const tabs = tabDefs.map((t, i) => ({
+      label: t.label, hasIcon: !!t.iconHtml, onClick: () => this.setTab(i),
+      iconHtml: { __html: t.iconHtml },
+      iconWrapStyle: `color:${t.color}; display:flex; flex-shrink:0;`,
+      style: `display:flex; align-items:center; gap:6px; background:none; border:none; padding:0 0 14px; margin-top:14px; cursor:pointer; white-space:nowrap; color:${i === this.state.activeTab ? activeFg : fgSecondary}; border-bottom:2px solid ${i === this.state.activeTab ? brand : 'transparent'};`,
+    }));
+
+    // ---- Reporting page (example of a second duplicated page sharing this shell) ----
+    const pageSwitcherBtnStyle = (active) => `background:${active ? container : 'transparent'}; border:1px solid ${active ? border : 'transparent'}; color:${active ? fgDefault : fgSecondary}; font-size:12px; font-weight:500; padding:4px 10px; border-radius:6px; cursor:pointer;`;
+    const pageSwitcherStyle = `display:flex; gap:4px; margin-left:auto; flex-shrink:0;`;
+    const switchToChat = () => this.setPage('chat');
+    const switchToReporting = () => this.setPage('reporting');
+
+    const reportHeaderRowStyle = `display:flex; align-items:center; justify-content:space-between; gap:16px; padding:16px 12px 12px;`;
+    const dateRangeOptions = ['Today', 'Yesterday', 'Last 7 days', 'Custom'];
+    const dateRangeGroupStyle = `display:flex; border:1px solid ${border}; border-radius:6px; overflow:hidden; flex-shrink:0;`;
+    const dateRangeBtns = dateRangeOptions.map((label, i) => {
+      const active = this.state.dateRange === label;
+      return {
+        label, onClick: () => this.setDateRange(label),
+        style: `padding:8px 14px; font-size:13px; font-weight:500; border:none; border-right:${i < dateRangeOptions.length - 1 ? `1px solid ${border}` : 'none'}; cursor:pointer; background:${active ? activeSubtle : container}; color:${active ? activeFg : fgDefault};`,
+      };
+    });
+
+    const reportTableWrapStyle = `flex:1; overflow:auto; padding:0 12px 16px;`;
+    const reportHeadRowStyle = `display:flex; padding:10px 8px; background:${activeSubtle}; color:${fgSecondary}; font-size:13px; border-radius:6px 6px 0 0;`;
+    const reportLabelColStyle = `flex:1; min-width:0;`;
+    const reportTimeColStyle = `flex:1; min-width:0;`;
+    const barCellStyle = `display:flex; align-items:center; gap:10px;`;
+    const barTrackStyle = `flex:1; height:20px; display:flex; align-items:center;`;
+    const barLabelStyle = `font-size:13px; color:${fgDefault}; flex-shrink:0; min-width:80px;`;
+
+    const mkBar = (pct, color) => `height:20px; width:${Math.max(pct, 1.5)}%; background:${color}; border-radius:2px;`;
+    const successMed = `color-mix(in srgb, ${success} 45%, white)`;
+    const warningMed = `color-mix(in srgb, ${warning} 45%, white)`;
+    const criticalMed = `color-mix(in srgb, ${critical} 45%, white)`;
+
+    const reportRowStyle = `padding:14px 8px; border-bottom:1px solid ${borderSubtle};`;
+    const reportSubRowStyle = `padding:8px 8px 0; display:flex; align-items:center; gap:16px;`;
+    const reportMainRowInner = `display:flex; align-items:center; gap:16px;`;
+    const reportIconWrapStyle = (color) => `width:18px; height:18px; flex-shrink:0; color:${color}; display:flex; align-items:center; justify-content:center;`;
+
+    // Lucide: circle-check / circle-dot / circle-minus
+    const checkCircleSvg = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>';
+    const dotCircleSvg = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>';
+    const minusCircleSvg = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg>';
+
+    const reportData = [
+      {
+        icon: checkCircleSvg, color: success, label: 'Available (0%)', time: '00:00:00', pct: 0,
+        subs: [{ label: 'Team (0%)', time: '00:00:00', pct: 0, color: successMed }],
+      },
+      {
+        icon: dotCircleSvg, color: warning, label: 'Working (0%)', time: '00:00:00', pct: 0,
+        subs: [{ label: 'Team (0%)', time: '00:00:00', pct: 0, color: warningMed }],
+      },
+      {
+        icon: minusCircleSvg, color: critical, label: 'Unavailable (100%)', time: '00:00:00', pct: 100,
+        subs: [
+          { label: 'Unavailable', time: '00:00:00', pct: 2, color: critical },
+          { label: 'Team (100%)', time: '00:00:26', pct: 100, color: criticalMed },
+        ],
+      },
+    ];
+    const reportRows = reportData.map(r => ({
+      label: r.label, time: r.time,
+      iconWrapStyle: reportIconWrapStyle(r.color),
+      iconHtml: { __html: r.icon },
+      barStyle: mkBar(r.pct, r.color),
+      subs: r.subs.map(s => ({ label: s.label, time: s.time, barStyle: mkBar(s.pct, s.color) })),
+    }));
+    const addTabStyle = `width:26px; height:26px; border:1px dashed ${border}; border-radius:6px; background:none; color:${fgSecondary}; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;`;
+
+    const interactionCardStyle = `flex:1; min-height:0; margin:8px 4px 8px 0; border-radius:8px; display:flex; flex-direction:column; overflow:hidden;`;
+    const subheaderStyle = `height:40px; flex-shrink:0; display:flex; align-items:center; justify-content:space-between; padding:0 12px; border-bottom:1px solid ${borderSubtle};`;
+    const statusPillStyle = `display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:600; padding:3px 8px; border-radius:999px; border:1px solid var(--lyra-color-status-warning-strong, #b45309); color:var(--lyra-color-status-warning-strong, #b45309); background:${container};`;
+    const statusDotStyle = `width:6px; height:6px; border-radius:50%; background:var(--lyra-color-status-warning-strong, #b45309); flex-shrink:0;`;
+    const smallIconBtnStyle = `width:26px; height:26px; border:none; background:none; border-radius:6px; color:${fgSecondary}; display:flex; align-items:center; justify-content:center; cursor:pointer;`;
+
+    const chatAreaStyle = `flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:12px;`;
+    const msgDefs = [
+      { sender: 'Agent Smith', text: 'Hi, Mr. Davis, my name is Agent Smith, how can I help you today?', time: '5 minutes ago', mine: true, read: true },
+      { sender: 'Liam Davis', text: "I'm as frustrated, I thought my bags would be here by now. Can you help me locate them?", time: '3 minutes ago', mine: false, read: false },
+      { sender: 'Agent Smith', text: 'Yes. Have you reached out to customer support previously?', time: '2 minutes ago', mine: true, read: true },
+      { sender: 'Liam Davis', text: "I talked with an Agent Kapor about a week ago and he said that would be taken care of in a couple of days, but I still haven't seen anything.", time: '1 minute ago', mine: false, read: false },
+    ];
+    const messages = msgDefs.map(m => ({
+      sender: m.sender, text: m.text, time: m.time, read: m.read,
+      wrapStyle: `display:flex; flex-direction:column; gap:4px; max-width:70%; align-self:${m.mine ? 'flex-end' : 'flex-start'}; align-items:${m.mine ? 'flex-end' : 'flex-start'};`,
+      bubbleStyle: `border-radius:8px; padding:8px 12px; background:${m.mine ? 'var(--lyra-color-bg-conversation-agent)' : 'var(--lyra-color-bg-conversation-customer)'};`,
+    }));
+
+    const composerStyle = `border-top:1px solid ${borderSubtle}; padding:10px 12px; display:flex; flex-direction:column; gap:8px; flex-shrink:0;`;
+    const composerToolbarStyle = `display:flex; align-items:center; gap:12px; color:${fgSecondary};`;
+    const toolbarDividerStyle = `width:1px; height:16px; background:${borderSubtle}; margin:0 2px;`;
+    const composerInputStyle = `border:1px solid ${border}; border-radius:6px; padding:8px 10px; font-size:13px; font-family:inherit; resize:vertical; outline:none; background:${container}; color:${fgDefault};`;
+    const composerFooterStyle = `display:flex; justify-content:flex-end; gap:8px;`;
+    const ghostBtnStyle = `height:32px; padding:0 12px; border-radius:6px; border:1px solid ${border}; background:${container}; color:${fgDefault}; font-size:13px; font-weight:500; cursor:pointer; display:flex; align-items:center;`;
+    const primaryBtnStyle = `height:32px; padding:0 16px; border-radius:6px; border:none; background:${brand}; color:#fff; font-size:13px; font-weight:500; cursor:pointer;`;
+
+    const appSpaceStyle = `width:${isTablet ? '280' : '300'}px; flex-shrink:0; background:${container}; border:1px solid ${borderSubtle}; border-radius:12px; margin:${isMobile ? '8px' : '10px'} 10px 10px 0; display:flex; flex-direction:column; overflow:hidden; ${isTablet ? 'position:fixed; top:52px; right:10px; bottom:10px; z-index:46; box-shadow:0 4px 16px rgba(0,0,0,0.16);' : ''}`;
+    const appSpaceHeaderStyle = `flex-shrink:0; display:flex; flex-direction:column; gap:8px; padding:10px 10px; border-bottom:1px solid ${borderSubtle};`;
+    const appSpaceIconRowStyle = `display:flex; align-items:center; gap:2px; flex-wrap:wrap;`;
+    const appSpaceCloseBtnStyle = `width:26px; height:26px; border:none; background:none; border-radius:6px; color:${fgSecondary}; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background 120ms ease;`;
+    const appSpaceIcons = iconOrder.map(key => ({
+      label: key,
+      active: key === selectedRailKey,
+      iconHtml: { __html: railIcons[key] },
+      style: `width:26px; height:26px; border:none; background:${key === selectedRailKey ? 'var(--lyra-color-bg-active-subtle)' : 'none'}; border-radius:6px; color:${key === selectedRailKey ? activeFg : fgSecondary}; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background 120ms ease; --icon-hover-bg:${key === selectedRailKey ? 'var(--lyra-color-state-bg-hover-active-subtle)' : 'var(--lyra-color-state-bg-hover-opacity)'}; --icon-press-bg:${key === selectedRailKey ? 'var(--lyra-color-state-bg-pressed-active-subtle)' : 'var(--lyra-color-state-bg-pressed-opacity)'};`,
+    }));
+    const appSpaceCanvasStyle = `flex:1; display:flex; align-items:center; justify-content:center; padding:20px;`;
+    const deviationNoteStyle = `font-size:10.5px; line-height:1.4; color:${fgSecondary}; padding:10px 12px; border-top:1px solid ${borderSubtle}; background:${shell};`;
+
+    const reportingIconSvg = railIcons.chartBarBig;
+
+    return {
+      theme, isDark, isMobile, isTablet, isDesktop, showAppSpace, canToggleAppSpace, showPageSidebar,
+      isReporting, isChatPage, isLight, pageSwitcherStyle, switchToChat, switchToReporting,
+      chatSwitcherBtnStyle: pageSwitcherBtnStyle(!isReporting), reportSwitcherBtnStyle: pageSwitcherBtnStyle(isReporting),
+      reportingIconWrap: `width:16px; height:16px; color:${fgSecondary}; display:flex;`,
+      reportingIconHtml: { __html: reportingIconSvg },
+      pageHeaderRowStyle, pageHeaderIconWrap, pageHeaderTitleStyle,
+      reportHeaderRowStyle, dateRangeGroupStyle, dateRangeBtns,
+      reportTableWrapStyle, reportHeadRowStyle, reportLabelColStyle, reportTimeColStyle,
+      reportRowStyle, reportSubRowStyle, reportMainRowInner, reportRows,
+      showGuide: this.state.showGuide, showScrim: drawerFixed && drawerOpen,
+      toggleTheme: this.toggleTheme, toggleDrawer: this.toggleDrawer, toggleAppSpace: this.toggleAppSpace, dismissGuide: this.dismissGuide,
+      rootStyle, guideBannerStyle, guideDismissStyle, topBarStyle, appNameStyle, brandMarkStyle, iconButtonStyle, notifButtonStyle,
+      notifDotStyle, profilePillStyle, avatarCircleStyle, bodyRowStyle, scrimStyle, navDrawerStyle, railOuterStyle, railStyle, railToggleStyle, railItems,
+      appSpaceIcons, appSpaceCloseBtnStyle,
+      assignments, purpleAccent, tileDividerStyle, tileNameStyle, tileSubtitleStyle, tileTimerStyle, tileSubcardWrapStyle, tileSubcardStyle, mainAreaStyle, contentShellStyle, pageSidebarStyle, pageSidebarHeaderStyle, sidebarHeaderIconBtnStyle, tileScrollStyle,
+      tileRowStyle, tileQueueRowStyle, tileIconGridStyle, tileIconBtnStyle, tileFooterStyle, tileFooterDividerStyle,
+      declineBtnStyle, acceptTileBtnStyle, pageFrameStyle, tabRowStyle,
+      tabs, addTabStyle, interactionCardStyle, subheaderStyle, statusPillStyle, statusDotStyle, smallIconBtnStyle, chatAreaStyle, messages,
+      composerStyle, composerToolbarStyle, toolbarDividerStyle, composerInputStyle, composerFooterStyle, ghostBtnStyle,
+      primaryBtnStyle, appSpaceStyle, appSpaceHeaderStyle, appSpaceIconRowStyle, appSpaceCanvasStyle, deviationNoteStyle,
+    };
+  }
+}
+
+</script>
+</body>
+</html>

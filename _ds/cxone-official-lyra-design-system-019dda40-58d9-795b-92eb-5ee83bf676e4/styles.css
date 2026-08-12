@@ -1,0 +1,606 @@
+/* ============================================================
+   Lyra Design System — root stylesheet
+   One entry point consumers link. Inlines colors_and_type.css
+   (which itself inlines lyra-tokens.css) — no @import chain.
+   ============================================================ */
+@import './components/fig-tokens.css';
+@import './components/fig-typography.css';
+@import './components/fig-assets.css';
+
+
+/* ============================================================
+   Lyra Design System (NiCE CXone) — Colors & Type
+   ============================================================
+   Canonical tokens come from lyra-tokens.css, synced VERBATIM
+   from davidbauerjr991/lyra-ui @ main (src/styles/lyra-tokens.css).
+   The legacy `--color-*` and `--lyra-brand-*` names below are backward-compat
+   ALIASES that now resolve to those real --lyra-color-* tokens,
+   so existing preview cards + UI kits stay in sync with the repo.
+   ============================================================ */
+/* ════════════════════════════════════════════════════
+   Lyra Foundations — Design Tokens
+   VERBATIM from davidbauerjr991/lyra-ui @ main
+   src/styles/lyra-tokens.css — do not hand-edit values;
+   re-sync from the repo instead.
+   ════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Background ── */
+  --lyra-color-bg-surface-base: #ffffff;
+  --lyra-color-bg-surface-canvas: #fcfcfd;
+  --lyra-color-bg-surface-container: #ffffff;
+  --lyra-color-bg-surface-container-subtle: #fbfcfe;
+  --lyra-color-bg-surface-shell: #f3f5f6;
+  --lyra-color-bg-surface-backdrop: rgba(0, 0, 0, 0.24);
+  --lyra-color-bg-surface-overlay: #ffffff;
+  --lyra-color-bg-surface-inverse: #2a2d32;
+  --lyra-color-bg-primary: #166cca;
+  --lyra-color-bg-secondary: #ffffff;
+  --lyra-color-bg-destructive: #bc2626;
+  --lyra-color-bg-control: #ffffff;
+  --lyra-color-bg-control-subtle: rgba(0, 0, 0, 0.02);
+  --lyra-color-bg-field: #ffffff;
+  --lyra-color-bg-field-ai: rgba(143, 115, 227, 0.04);
+  --lyra-color-bg-disabled: rgba(0, 0, 0, 0.06);
+  --lyra-color-bg-none: rgba(0, 0, 0, 0.00);
+  --lyra-color-bg-active-strong: #166cca;
+  --lyra-color-bg-active-moderate: #D3E6FD;
+  --lyra-color-bg-active-subtle: #ecf5fe;
+  --lyra-color-bg-conversation-ai: #f3f5f6;
+  --lyra-color-bg-conversation-agent: #eef4fe;
+  --lyra-color-bg-conversation-customer: #eefaf0;
+  --lyra-color-bg-conversation-user: #E5EEFF;
+
+  /* ── Foreground / Text ── */
+  --lyra-color-fg-default: rgba(0, 0, 0, 0.80);
+  --lyra-color-fg-secondary: rgba(0, 0, 0, 0.56);
+  --lyra-color-fg-action: #5D6A79;
+  --lyra-color-fg-disabled: rgba(0, 0, 0, 0.55);
+  --lyra-color-fg-link: #185ba4;
+  --lyra-color-fg-inverse: #ffffff;
+  --lyra-color-fg-inverse-disabled: rgba(255, 255, 255, 0.30);
+  --lyra-color-fg-on-primary: #ffffff;
+  --lyra-color-fg-on-destructive: #ffffff;
+  --lyra-color-fg-active-subtle: #f5faff;
+  --lyra-color-fg-active-strong: #185ba4;
+
+  /* ── Border ── */
+  --lyra-color-border-subtle: rgba(0, 0, 0, 0.10);
+  --lyra-color-border-default: rgba(0, 0, 0, 0.16);
+  --lyra-color-border-medium: rgba(0, 0, 0, 0.32);
+  --lyra-color-border-strong: rgba(0, 0, 0, 0.46);
+  --lyra-color-border-disabled: rgba(0, 0, 0, 0.10);
+  --lyra-color-border-active: #166cca;
+  --lyra-color-border-field-ai: #4e39a8;
+  --lyra-color-border-inverse: rgba(255, 255, 255, 0.80);
+  --lyra-color-border-none: rgba(0, 0, 0, 0.00);
+  --lyra-color-border-focus-default: #185ba4;
+  --lyra-color-border-focus-inverse: #fcce36;
+
+  /* ── Status ── */
+  --lyra-color-status-success-strong: #21742c;
+  --lyra-color-status-success-medium: #5ac368;
+  --lyra-color-status-success-subtle: #ebfaed;
+  --lyra-color-status-info-strong: #2558c1;
+  --lyra-color-status-info-medium: #709cf5;
+  --lyra-color-status-info-subtle: #f0f5ff;
+  --lyra-color-status-critical-strong: #bc2626;
+  --lyra-color-status-critical-medium: #fa7f7f;
+  --lyra-color-status-critical-subtle: #fff0f0;
+  --lyra-color-state-bg-hover-critical-subtle: #ffebeb;
+  --lyra-color-state-bg-pressed-critical-subtle: #ffe0e0;
+  --lyra-color-status-warning-strong: #8e6800;
+  --lyra-color-status-warning-medium: #fcce36;
+  --lyra-color-status-warning-subtle: #fffae0;
+
+  /* ── State ── */
+  --lyra-color-state-bg-hover-opacity: rgba(0, 0, 0, 0.04);
+  --lyra-color-state-bg-pressed-opacity: rgba(0, 0, 0, 0.10);
+  --lyra-color-state-bg-hover-secondary: #fcfcfd;
+  --lyra-color-state-bg-pressed-secondary: #f3f5f6;
+  --lyra-color-state-bg-hover-active-subtle: #e8f1fc;
+  --lyra-color-state-bg-pressed-active-subtle: #c8e1fe;
+  --lyra-color-state-bg-hover-active-strong: #185ba4;
+  --lyra-color-state-bg-pressed-active-strong: #164479;
+  --lyra-color-state-bg-hover-primary: #185ba4;
+  --lyra-color-state-bg-pressed-primary: #164479;
+  --lyra-color-state-bg-hover-destructive: #902222;
+  --lyra-color-state-bg-pressed-destructive: #6d2222;
+  --lyra-color-state-border-hover-neutral: rgba(0, 0, 0, 0.80);
+
+  /* ── Avatar (theme-invariant) ── */
+  --lyra-color-avatar-default-bg: #5d6a79;
+
+  /* ── Accent ── */
+  --lyra-color-accent-slate-soft: #e8ebed;
+  --lyra-color-accent-slate-strong: #5d6a79;
+  --lyra-color-accent-red-soft: #ffdbdb;
+  --lyra-color-accent-red-strong: #bc2626;
+  --lyra-color-accent-orange-soft: #ffe2c7;
+  --lyra-color-accent-orange-strong: #a64f00;
+  --lyra-color-accent-yellow-soft: #fff3ad;
+  --lyra-color-accent-yellow-strong: #8e6800;
+  --lyra-color-accent-lime-soft: #def6a7;
+  --lyra-color-accent-lime-strong: #4e760c;
+  --lyra-color-accent-green-soft: #d2f4d5;
+  --lyra-color-accent-green-strong: #21742c;
+  --lyra-color-accent-teal-soft: #c4f0f3;
+  --lyra-color-accent-teal-strong: #11737c;
+  --lyra-color-accent-blue-soft: #d6e4ff;
+  --lyra-color-accent-blue-strong: #2558c1;
+  --lyra-color-accent-purple-soft: #e6e0ff;
+  --lyra-color-accent-purple-strong: #6149c1;
+  --lyra-color-accent-pink-soft: #ffe0f5;
+  --lyra-color-accent-pink-strong: #b53389;
+
+  /* ── Border Radius ── */
+  --lyra-radius-none: 0px;
+  --lyra-radius-xs: 4px;
+  --lyra-radius-sm: 6px;
+  --lyra-radius-md: 8px;
+  --lyra-radius-lg: 12px;
+  --lyra-radius-xl: 16px;
+  --lyra-radius-round: 999px;
+
+  /* ── Spacing (4px base unit) ── */
+  --lyra-spacing-0: 0px;
+  --lyra-spacing-1: 4px;
+  --lyra-spacing-2: 8px;
+  --lyra-spacing-3: 12px;
+  --lyra-spacing-4: 16px;
+  --lyra-spacing-5: 20px;
+  --lyra-spacing-6: 24px;
+  --lyra-spacing-7: 28px;
+  --lyra-spacing-8: 32px;
+  --lyra-spacing-9: 36px;
+
+  /* ── Border Width ── */
+  --lyra-border-none: 0px;
+  --lyra-border-default: 1px;
+  --lyra-border-md: 2px;
+  --lyra-border-lg: 3px;
+}
+
+/* ════════════════════════════════════════════════════
+   Lyra Dark Theme — [data-theme="dark"]
+   ════════════════════════════════════════════════════ */
+[data-theme="dark"] {
+  --lyra-color-bg-surface-base: #1f1f1e;
+  --lyra-color-bg-surface-canvas: #141414;
+  --lyra-color-bg-surface-container: #1f1f1e;
+  --lyra-color-bg-surface-container-subtle: #262626;
+  --lyra-color-bg-surface-shell: #2e2e2e;
+  --lyra-color-bg-surface-backdrop: rgba(0, 0, 0, 0.24);
+  --lyra-color-bg-surface-overlay: #2e2e2e;
+  --lyra-color-bg-surface-inverse: #eceff3;
+  --lyra-color-bg-primary: #166cca;
+  --lyra-color-bg-secondary: rgba(255, 255, 255, 0.04);
+  --lyra-color-bg-destructive: #bd2a2a;
+  --lyra-color-bg-control: #1f1f1e;
+  --lyra-color-bg-control-subtle: rgba(255, 255, 255, 0.04);
+  --lyra-color-bg-field: rgba(255, 255, 255, 0.04);
+  --lyra-color-bg-field-ai: rgba(143, 115, 227, 0.08);
+  --lyra-color-bg-disabled: rgba(255, 255, 255, 0.04);
+  --lyra-color-bg-none: rgba(255, 255, 255, 0.00);
+  --lyra-color-bg-active-strong: #4896ec;
+  --lyra-color-bg-active-moderate: rgba(72, 150, 236, 0.20);
+  --lyra-color-bg-active-subtle: rgba(72, 150, 236, 0.12);
+  --lyra-color-bg-conversation-ai: rgba(255, 255, 255, 0.04);
+  --lyra-color-bg-conversation-agent: rgba(44, 138, 242, 0.18);
+  --lyra-color-bg-conversation-customer: #0f2a13;
+  --lyra-color-bg-conversation-user: rgba(44, 138, 242, 0.18);
+
+  --lyra-color-fg-default: rgba(255, 255, 255, 0.80);
+  --lyra-color-fg-secondary: rgba(255, 255, 255, 0.60);
+  --lyra-color-fg-action: #acb7c3;
+  --lyra-color-fg-disabled: rgba(255, 255, 255, 0.20);
+  --lyra-color-fg-link: #a7d0fe;
+  --lyra-color-fg-inverse: #1f1f1e;
+  --lyra-color-fg-inverse-disabled: rgba(0, 0, 0, 0.30);
+  --lyra-color-fg-on-primary: #ffffff;
+  --lyra-color-fg-on-destructive: #ffffff;
+  --lyra-color-fg-active-subtle: #0c2845;
+  --lyra-color-fg-active-strong: #a7d0fe;
+
+  --lyra-color-border-subtle: rgba(255, 255, 255, 0.10);
+  --lyra-color-border-default: rgba(255, 255, 255, 0.16);
+  --lyra-color-border-medium: rgba(255, 255, 255, 0.32);
+  --lyra-color-border-strong: rgba(255, 255, 255, 0.46);
+  --lyra-color-border-disabled: rgba(255, 255, 255, 0.10);
+  --lyra-color-border-active: #4896ec;
+  --lyra-color-border-field-ai: #a998e7;
+  --lyra-color-border-inverse: rgba(0, 0, 0, 0.80);
+  --lyra-color-border-none: rgba(255, 255, 255, 0.00);
+  --lyra-color-border-focus-default: #facb33;
+  --lyra-color-border-focus-inverse: #185ba4;
+
+  --lyra-color-status-success-strong: #64b96f;
+  --lyra-color-status-success-medium: #23722d;
+  --lyra-color-status-success-subtle: rgba(33, 116, 44, 0.20);
+  --lyra-color-status-info-strong: #789fed;
+  --lyra-color-status-info-medium: #2d5bb9;
+  --lyra-color-status-info-subtle: rgba(37, 88, 193, 0.20);
+  --lyra-color-status-critical-strong: #fa7f7f;
+  --lyra-color-status-critical-medium: #bd2a2a;
+  --lyra-color-status-critical-subtle: rgba(227, 69, 69, 0.12);
+  --lyra-color-state-bg-hover-critical-subtle: rgba(227, 69, 69, 0.18);
+  --lyra-color-state-bg-pressed-critical-subtle: rgba(227, 69, 69, 0.24);
+  --lyra-color-status-warning-strong: #facb33;
+  --lyra-color-status-warning-medium: #8e6800;
+  --lyra-color-status-warning-subtle: rgba(142, 104, 0, 0.20);
+
+  --lyra-color-state-bg-hover-opacity: rgba(255, 255, 255, 0.06);
+  --lyra-color-state-bg-pressed-opacity: rgba(255, 255, 255, 0.12);
+  --lyra-color-state-bg-hover-secondary: rgba(255, 255, 255, 0.10);
+  --lyra-color-state-bg-pressed-secondary: rgba(255, 255, 255, 0.16);
+  --lyra-color-state-bg-hover-active-subtle: rgba(72, 150, 236, 0.18);
+  --lyra-color-state-bg-pressed-active-subtle: rgba(72, 150, 236, 0.24);
+  --lyra-color-state-bg-hover-active-strong: #a7d0fe;
+  --lyra-color-state-bg-pressed-active-strong: #d3e6fd;
+  --lyra-color-state-bg-hover-primary: #185ba4;
+  --lyra-color-state-bg-pressed-primary: #164479;
+  --lyra-color-state-bg-hover-destructive: #a32424;
+  --lyra-color-state-bg-pressed-destructive: #8a1f1f;
+  --lyra-color-state-border-hover-neutral: rgba(255, 255, 255, 0.80);
+
+  --lyra-color-avatar-default-bg: #5d6a79;
+
+  --lyra-color-accent-slate-soft: #49515a;
+  --lyra-color-accent-slate-strong: #d0d6dc;
+  --lyra-color-accent-red-soft: #a32424;
+  --lyra-color-accent-red-strong: #ffb8b8;
+  --lyra-color-accent-orange-soft: #7d420c;
+  --lyra-color-accent-orange-strong: #ffcc9e;
+  --lyra-color-accent-yellow-soft: #674b13;
+  --lyra-color-accent-yellow-strong: #ffe680;
+  --lyra-color-accent-lime-soft: #446311;
+  --lyra-color-accent-lime-strong: #c9ea80;
+  --lyra-color-accent-green-soft: #1f5c27;
+  --lyra-color-accent-green-strong: #b0e8b7;
+  --lyra-color-accent-teal-soft: #1b636a;
+  --lyra-color-accent-teal-strong: #aae0e5;
+  --lyra-color-accent-blue-soft: #264c97;
+  --lyra-color-accent-blue-strong: #b9cef8;
+  --lyra-color-accent-purple-soft: #4e39a8;
+  --lyra-color-accent-purple-strong: #d1c9f2;
+  --lyra-color-accent-pink-soft: #91296e;
+  --lyra-color-accent-pink-strong: #fccaeb;
+
+  color-scheme: dark;
+}
+
+/* ════════════════════════════════════════════════════
+   Lyra Typography Scale (Inter) — verbatim from repo
+   ════════════════════════════════════════════════════ */
+.lyra-heading-2xl { font-size: 28px; line-height: 32px; font-weight: 700; letter-spacing: -0.02rem; }
+.lyra-heading-xl  { font-size: 24px; line-height: 28px; font-weight: 500; letter-spacing: -0.02rem; }
+.lyra-heading-lg  { font-size: 20px; line-height: 24px; font-weight: 500; letter-spacing: -0.01rem; }
+.lyra-heading-md  { font-size: 16px; line-height: 24px; font-weight: 500; letter-spacing: -0.01rem; }
+.lyra-heading-sm  { font-size: 14px; line-height: 20px; font-weight: 500; letter-spacing: 0; }
+.lyra-heading-xs  { font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: 0.01rem; }
+
+.lyra-label { font-size: 14px; line-height: 20px; font-weight: 500; letter-spacing: 0; }
+
+.lyra-body-lg          { font-size: 16px; line-height: 24px; font-weight: 400; letter-spacing: -0.01rem; }
+.lyra-body-lg-emphasis { font-size: 16px; line-height: 24px; font-weight: 500; letter-spacing: -0.01rem; }
+.lyra-body-md          { font-size: 14px; line-height: 20px; font-weight: 400; letter-spacing: 0; }
+.lyra-body-md-emphasis { font-size: 14px; line-height: 20px; font-weight: 500; letter-spacing: 0; }
+.lyra-body-sm          { font-size: 12px; line-height: 16px; font-weight: 400; letter-spacing: 0.01rem; }
+.lyra-body-sm-emphasis { font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: 0.01rem; }
+.lyra-body-xs          { font-size: 10px; line-height: 14px; font-weight: 400; letter-spacing: 0.01rem; }
+.lyra-body-xs-emphasis { font-size: 10px; line-height: 14px; font-weight: 500; letter-spacing: 0.01rem; }
+
+
+/* ---------- Webfonts ----------
+   Primary type: Inter for EVERYTHING — body, UI, and the LYRA wordmark.
+   Loaded from local TTF files (variable axes: opsz, wght). */
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/Inter-VariableFont_opsz_wght.ttf") format("truetype-variations"),
+       url("fonts/Inter-VariableFont_opsz_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/Inter-Italic-VariableFont_opsz_wght.ttf") format("truetype-variations"),
+       url("fonts/Inter-Italic-VariableFont_opsz_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cascadia Code";
+  src: url("fonts/CascadiaCode-VariableFont_wght.ttf") format("truetype-variations"),
+       url("fonts/CascadiaCode-VariableFont_wght.ttf") format("truetype");
+  font-weight: 200 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cascadia Code";
+  src: url("fonts/CascadiaCode-Italic-VariableFont_wght.ttf") format("truetype-variations"),
+       url("fonts/CascadiaCode-Italic-VariableFont_wght.ttf") format("truetype");
+  font-weight: 200 700;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist";
+  src: url("fonts/Geist-VariableFont_wght.ttf") format("truetype-variations"),
+       url("fonts/Geist-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Open Sans";
+  src: url("fonts/OpenSans-VariableFont_wght.ttf") format("truetype-variations"),
+       url("fonts/OpenSans-VariableFont_wght.ttf") format("truetype");
+  font-weight: 300 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+:root {
+  /* ============================================================
+     BASE COLORS
+     "Equal perceptual luminosity" scale; 50–950 ramps.
+     ============================================================ */
+
+  /* Brand — CXone blue.  500 is the primary brand value. */
+  --lyra-brand-50:  #e9f1fc;
+  --lyra-brand-100: #cfe0f8;
+  --lyra-brand-200: #a6c6f0;
+  --lyra-brand-300: #72a6e8;
+  --lyra-brand-400: #4896ec;
+  --lyra-brand-500: #3d81e7; /* primary */
+  --lyra-brand-600: #166cca; /* primary-pressed */
+  --lyra-brand-700: #185ba4;
+  --lyra-brand-800: #164479;
+  --lyra-brand-900: #0c2459;
+  --lyra-brand-950: #11375f;
+
+  /* Slate — primary neutral for surfaces, text, borders */
+  --lyra-slate-50:  #fbfcfe;
+  --lyra-slate-100: #f5f7f9;
+  --lyra-slate-200: #eef0f2;
+  --lyra-slate-300: #d2d8db;
+  --lyra-slate-400: #a8b3bb;
+  --lyra-slate-500: #82959e;
+  --lyra-slate-600: #526b7a;
+  --lyra-slate-700: #3f5e69;
+  --lyra-slate-800: #3f4e5d;
+  --lyra-slate-900: #1d2630;
+  --lyra-slate-950: #05131a;
+
+  /* Gray — true gray, used sparingly for dividers / placeholders */
+  --lyra-gray-50:  #fafafa;
+  --lyra-gray-100: #f5f5f5;
+  --lyra-gray-200: #ededed;
+  --lyra-gray-300: #e5e5e5;
+  --lyra-gray-400: #cfcfcf;
+  --lyra-gray-500: #a3a3a3;
+  --lyra-gray-600: #737373;
+  --lyra-gray-700: #525252;
+  --lyra-gray-800: #2e2e2e;
+  --lyra-gray-900: #141414;
+
+  /* Status: Red (destructive / error) */
+  --lyra-red-50:  #ffecec;
+  --lyra-red-100: #ffdbdb;
+  --lyra-red-300: #ff9b9b;
+  --lyra-red-500: #d83434;
+  --lyra-red-600: #bf2323;
+  --lyra-red-700: #8a1c1c;
+  --lyra-red-900: #331a1a;
+
+  /* Status: Orange / Warning */
+  --lyra-orange-50:  #fff2e2;
+  --lyra-orange-300: #ffc285;
+  --lyra-orange-500: #ec7000;
+  --lyra-orange-600: #c45d00;
+  --lyra-orange-700: #a64f00;
+
+  /* Status: Yellow */
+  --lyra-yellow-50:  #fff8d4;
+  --lyra-yellow-500: #f8a10a;
+  --lyra-yellow-700: #8e6800;
+
+  /* Status: Green / Success */
+  --lyra-green-50:  #e6f7e8;
+  --lyra-green-500: #278a33;
+  --lyra-green-700: #1c5e25;
+
+  /* Teal */
+  --lyra-teal-500: #006889;
+
+  /* Purple — used for AI surfaces */
+  --lyra-purple-300: #b59cd9;
+  --lyra-purple-500: #7856ba;
+  --lyra-purple-700: #4d3a7a;
+
+  /* Pink */
+  --lyra-pink-500: #b53389;
+
+  --lyra-black: #000000;
+  --lyra-white: #ffffff;
+
+  /* ============================================================
+     SEMANTIC TOKENS (themeable; Lyra prescribes these names)
+     ============================================================ */
+
+  /* --- Surfaces (page / panel backgrounds) — alias → real tokens --- */
+  --color-bg-surface-base:             var(--lyra-color-bg-surface-base);
+  --color-bg-surface-container:        var(--lyra-color-bg-surface-container);
+  --color-bg-surface-container-subtle: var(--lyra-color-bg-surface-container-subtle);
+  --color-bg-surface-overlay:          var(--lyra-color-bg-surface-overlay);
+  --color-bg-surface-canvas:           var(--lyra-color-bg-surface-canvas);
+  --color-bg-surface-shell:            var(--lyra-color-bg-surface-shell);
+  --color-bg-surface-backdrop:         var(--lyra-color-bg-surface-backdrop);
+  --color-bg-surface-inverse:          var(--lyra-color-bg-surface-inverse);
+
+  /* --- Content fills (controls on a surface) --- */
+  --color-bg-primary:        var(--lyra-color-bg-primary);
+  --color-bg-primary-hover:  var(--lyra-color-state-bg-hover-primary);
+  --color-bg-destructive:    var(--lyra-color-bg-destructive);
+  --color-bg-secondary:      var(--lyra-color-bg-secondary);
+  --color-bg-field:          var(--lyra-color-bg-field);
+  --color-bg-ai:             var(--lyra-color-bg-field-ai);
+  --color-bg-control:        var(--lyra-color-bg-control);
+  --color-bg-control-subtle: var(--lyra-color-bg-control-subtle);
+  --color-bg-disabled:       var(--lyra-color-bg-disabled);
+  --color-bg-none:           var(--lyra-color-bg-none);
+
+  /* --- Active / selected backgrounds --- */
+  --color-bg-active-strong:   var(--lyra-color-bg-active-strong);
+  --color-bg-active-moderate: var(--lyra-color-bg-active-moderate);
+  --color-bg-active-subtle:   var(--lyra-color-bg-active-subtle);
+
+  /* --- Foregrounds (text / icons) --- */
+  --color-fg-default:          var(--lyra-color-fg-default);
+  --color-fg-secondary:        var(--lyra-color-fg-secondary);
+  --color-fg-action:           var(--lyra-color-fg-action);
+  --color-fg-disabled:         var(--lyra-color-fg-disabled);
+  --color-fg-link:             var(--lyra-color-fg-link);
+  --color-fg-on-primary:       var(--lyra-color-fg-on-primary);
+  --color-fg-on-destructive:   var(--lyra-color-fg-on-destructive);
+  --color-fg-inverse:          var(--lyra-color-fg-inverse);
+  --color-fg-inverse-disabled: var(--lyra-color-fg-inverse-disabled);
+  --color-fg-active-strong:    var(--lyra-color-fg-active-strong);
+  --color-fg-active-subtle:    var(--lyra-color-fg-active-subtle);
+
+  /* --- Status foregrounds --- */
+  --color-fg-success:    var(--lyra-color-status-success-strong);
+  --color-fg-warning:    var(--lyra-color-status-warning-strong);
+  --color-fg-destructive:var(--lyra-color-status-critical-strong);
+  --color-fg-ai:         var(--lyra-color-accent-purple-strong);
+
+  /* --- Borders --- */
+  --color-border-soft:           var(--lyra-color-border-subtle);
+  --color-border-medium:         var(--lyra-color-border-default);
+  --color-border-strong:         var(--lyra-color-border-medium);
+  --color-border-disabled:       var(--lyra-color-border-disabled);
+  --color-border-none:           var(--lyra-color-border-none);
+  --color-border-active:         var(--lyra-color-border-active);
+  --color-border-inverse:        var(--lyra-color-border-inverse);
+  --color-border-focus-default:  var(--lyra-color-border-focus-default);
+  --color-border-focus-inverse:  var(--lyra-color-border-focus-inverse);
+
+  /* ============================================================
+     RADII (Lyra's "Sizes" scale)
+     ============================================================ */
+  --radius-xs:    4px;   /* 0.25 rem */
+  --radius-sm:    6px;   /* 0.375 rem */
+  --radius-md:    8px;   /* 0.5 rem  */
+  --radius-lg:    12px;  /* 0.75 rem */
+  --radius-xl:    16px;  /* 1 rem    */
+  --radius-round: 9999px;
+
+  /* ============================================================
+     SPACING (4px base scale)
+     ============================================================ */
+  --space-0:  0;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ============================================================
+     ELEVATION (5 named tiers from /Effects)
+     ============================================================ */
+  --elev-1: 0px 1px 2px 0px rgba(16,24,40,0.06);
+  --elev-2: 0px 1px 2px 0px rgba(16,24,40,0.15), 0px 1px 3px 0px rgba(16,24,40,0.30);
+  --elev-3: 0px 4px 6px -2px rgba(16,24,40,0.05), 0px 12px 16px -4px rgba(16,24,40,0.12);
+  --elev-4: 0px 8px 8px -4px rgba(16,24,40,0.04), 0px 20px 24px -4px rgba(16,24,40,0.14);
+  --elev-5: 0px 24px 48px -12px rgba(16,24,40,0.32);
+
+  /* Focus ring */
+  --focus-ring: 0 0 0 2px var(--color-bg-surface-base), 0 0 0 4px var(--color-border-focus-default);
+
+  /* ============================================================
+     TYPOGRAPHY
+     Family: Inter for everything, including the LYRA wordmark.
+     The Lyra Typography table prescribes:
+       Heading XL  24/28  500  -0.02rem
+       Heading LG  20/24  500  -0.01rem
+       Heading MD  16/24  500  -0.01rem
+       Heading SM  14/20  500   0
+       Heading XS  12/16  500   0.01rem
+       Body LG     16/24  400  -0.01rem
+       Body MD     14/20  400   0
+       Body SM     12/16  400   0.01rem
+       Label       14/20  500   0
+     ============================================================ */
+  --font-sans:    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Inter", sans-serif;
+  --font-mono:    ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+
+  /* Token sizes (use vars where possible) */
+  --text-h-xl: 600 24px/28px var(--font-sans);
+  --text-h-lg: 600 20px/24px var(--font-sans);
+  --text-h-md: 500 16px/24px var(--font-sans);
+  --text-h-sm: 500 14px/20px var(--font-sans);
+  --text-h-xs: 500 12px/16px var(--font-sans);
+  --text-body-lg: 400 16px/24px var(--font-sans);
+  --text-body-md: 400 14px/20px var(--font-sans);
+  --text-body-sm: 400 12px/16px var(--font-sans);
+  --text-label:   500 14px/20px var(--font-sans);
+}
+
+/* =================================================================
+   SEMANTIC ELEMENT STYLES
+   These are reasonable defaults; pages can opt in by including
+   .lyra (or use as a base on <body>).
+   ================================================================= */
+.lyra,
+.lyra * {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.lyra {
+  font: var(--text-body-md);
+  color: var(--color-fg-default);
+  background: var(--color-bg-surface-shell);
+  font-feature-settings: "ss01", "cv11"; /* Inter contextual alternates */
+}
+
+.lyra h1, .lyra .h-xl { font: var(--text-h-xl); letter-spacing: -0.02rem; margin: 0; }
+.lyra h2, .lyra .h-lg { font: var(--text-h-lg); letter-spacing: -0.01rem; margin: 0; }
+.lyra h3, .lyra .h-md { font: var(--text-h-md); letter-spacing: -0.01rem; margin: 0; }
+.lyra h4, .lyra .h-sm { font: var(--text-h-sm); margin: 0; }
+.lyra h5, .lyra .h-xs { font: var(--text-h-xs); letter-spacing: 0.01rem; text-transform: uppercase; margin: 0; color: var(--color-fg-secondary); }
+.lyra p,  .lyra .body { font: var(--text-body-md); margin: 0; }
+.lyra .body-lg { font: var(--text-body-lg); letter-spacing: -0.01rem; }
+.lyra .body-sm { font: var(--text-body-sm); letter-spacing: 0.01rem; }
+.lyra .label   { font: var(--text-label); }
+
+.lyra a {
+  color: var(--color-fg-link);
+  text-decoration: none;
+}
+.lyra a:hover { text-decoration: underline; }
+
+.lyra code, .lyra .mono {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  background: var(--lyra-slate-100);
+  padding: 1px 6px;
+  border-radius: var(--radius-xs);
+}
+
+.lyra .wordmark {
+  font-family: var(--font-display);
+  font-size: 100px;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
